@@ -1,0 +1,7 @@
+{
+  "name": "Taller1_Front_Movil",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
