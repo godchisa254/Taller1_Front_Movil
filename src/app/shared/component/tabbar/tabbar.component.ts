@@ -28,6 +28,6 @@ export class TabbarComponent   {
   }
 
   navigateTo(route: string) {
-    this.router.navigate([`tab${route}`]);
+    this.router.navigate([`tabs${route}`]);
   }
 }
