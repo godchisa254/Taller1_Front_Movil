@@ -1,34 +1,37 @@
-<ion-card class="max-w-sm">
+<ion-card class="w-72 h-[400px]">
   <!-- Imagen -->
   <ion-img  
-    class="rounded-t-lg w-full h-48 object-cover max-w-lg transition-all duration-300 hover:grayscale-0"
+    class="w-full h-48 object-cover rounded-t-lg"
     [src]="product.image || 'placeholder-image.jpg'"
     alt="Imagen producto">
   </ion-img>
 
   <!-- Tarjeta -->
-  <div class="p-5">
+  <div class="p-5 flex flex-col justify-between h-[calc(400px-192px)]">
     <!-- Nombre producto -->
     <ion-card-header>
-      <ion-card-title class="text-xl font-semibold tracking-tight text-gray-900 mb-2">
+      <ion-card-title 
+        class=" font-medium tracking-tight text-gray-900 mb-2 text-sm">
         {{ product.name }} -
-        <span class="text-gray-500">{{ productTypeName }}</span>
+        <span class="text-sm text-gray-500">{{ productTypeName }}</span>
       </ion-card-title>
     </ion-card-header>
 
     <!-- Barra inferior -->
-    <div class="ion-padding-top ion-padding-bottom">
+    <div class="flex flex-col gap-4 items-center">
       <!-- Precio -->
-      <span class="text-lg font-bold text-gray-900">
-        ${{ product.price | number: "1.0-2" }}
-      </span>
+      <div class="w-full flex justify-between items-center">
+        <span class="text-2xl font-bold text-gray-900">
+          ${{ product.price | number: "1.0-2" }}
+        </span>
+      </div>
 
       <!-- Agregar al carrito -->
       <ion-button
         [color]="product.stock > 0 ? 'primary' : 'medium'"
         [disabled]="0 >= product.stock"
         expand="block"
-        class="mt-2"
+        class="w-full"
         (click)="addShoppinCart(product.id)"
       >
         {{ product.stock > 0 ? 'Agregar al carrito' : 'Stock agotado' }}
