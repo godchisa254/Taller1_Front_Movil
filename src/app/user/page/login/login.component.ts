@@ -13,38 +13,14 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../service/auth.service';
 import { UserLogin } from '../../interfaces/User';
 import { finalize } from 'rxjs';
-import { HttpErrorResponse,   } from '@angular/common/http';
-import {
-  IonContent,
-  IonItem,
-  IonLabel,
-  IonInput,
-  IonButton,
-  IonSpinner,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardTitle,
-} from '@ionic/angular/standalone'; 
+import { HttpErrorResponse } from '@angular/common/http';
+import { IonicModule } from '@ionic/angular';
 import { LocalStorageService } from '../../service/local-storage.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule,
-    ReactiveFormsModule, 
-    // Agregamos los componentes de Ionic
-    IonContent,
-    IonItem,
-    IonLabel,
-    IonInput,
-    IonButton,
-    IonSpinner,
-    IonCard,
-    IonCardContent,
-    IonCardHeader,
-    IonCardTitle,
-  ],
+  imports: [CommonModule, ReactiveFormsModule, IonicModule],
   templateUrl: './login.component.html',
 })
 export class LoginComponent {
@@ -53,7 +29,7 @@ export class LoginComponent {
   private readonly router = inject(Router);
   private readonly localStorageService = inject(LocalStorageService);
   error: boolean = false;
-  errorMessage: string= "";
+  errorMessage: string = '';
 
   protected readonly loginForm: FormGroup = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -72,29 +48,31 @@ export class LoginComponent {
   protected onSubmit(): void {
     if (this.loginForm.invalid) {
       Object.values(this.loginForm.controls).forEach((control) => {
-        control.markAllAsTouched();  
+        control.markAllAsTouched();
       });
       return;
     }
-    
+
     const loginData = this.loginForm.value;
     this.loading = true;
-  
-    this.authService.login(loginData).pipe(finalize(() => (this.loading = false)))
+
+    this.authService
+      .login(loginData)
+      .pipe(finalize(() => (this.loading = false)))
       .subscribe({
         next: (response) => {
           this.loading = true;
           if (response.token) {
-            const role = this.localStorageService.getRoleFromToken(); 
+            const role = this.localStorageService.getRoleFromToken();
             setTimeout(() => {
               if (role === 'Admin') {
-                this.router.navigate(['/404']);  
+                this.router.navigate(['/404']);
               } else {
-                this.router.navigate(['/products/list']);  
+                this.router.navigate(['/products/list']);
                 console.log('Login successful');
                 this.loading = false;
               }
-            }, 1500); 
+            }, 1500);
           } else {
             console.log('Error in login');
             this.error = true;
@@ -104,10 +82,9 @@ export class LoginComponent {
           this.error = true;
           this.errorMessage = error;
           console.log(this.errorMessage);
-        }
+        },
       });
   }
-  
 
   private alphanumericValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
