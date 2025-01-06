@@ -1,0 +1,124 @@
+<ion-content class="ion-padding"> 
+  <div class="ion-padding-bottom">
+    <ion-row class="ion-align-items-center ion-justify-content-between">
+      <!-- Input de búsqueda -->
+      <ion-col size="12" size-md="8">
+        <div
+          class="ion-padding-top ion-padding-bottom"
+        >
+          <ion-label class="ion-text-wrap" >
+            Palabras clave
+          </ion-label>
+          <ion-input
+            [(ngModel)]="searchQuery"
+            (input)="onSearch()"
+            class="ion-input-md "
+            placeholder="Buscar por nombre" 
+          ></ion-input>
+        </div>
+      </ion-col>
+
+      <!-- Filtros de categoría -->
+      <ion-col size="auto" size-md="4">
+        <div class="ion-padding-top ion-padding-bottom">
+          <ion-label class="ion-text-wrap">Categoría</ion-label>
+          <ion-select
+            [(ngModel)]="selectedCategoryId"
+            (ionChange)="onCategorySelect(selectedCategoryId, selectedCategoryName)"
+            interface="popover"
+            placeholder="Seleccionar categoría"
+          >
+            <ion-select-option
+              *ngFor="let type of productTypes"
+              [value]="type.id"
+            >
+              {{ type.type }}
+            </ion-select-option>
+          </ion-select>
+        </div>
+      </ion-col>
+
+      <!-- Filtros de precio -->
+      <ion-col size="auto" size-md="4">
+        <div class="ion-padding-top ion-padding-bottom">
+          <ion-label class="ion-text-wrap">Ordenar por precio</ion-label>
+          <ion-select
+            (ionChange)="onPriceSortChange($event)"
+            placeholder="Seleccionar orden"
+            interface="popover"
+          >
+            <ion-select-option value="">Sin orden</ion-select-option>
+            <ion-select-option value="menorAmayor">
+              Menor a mayor
+            </ion-select-option>
+            <ion-select-option value="mayorAmenor">
+              Mayor a menor
+            </ion-select-option>
+          </ion-select>
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+
+  <!-- Título página -->
+  <h1   class="ion-text-center ion-no-margin">
+    Nuestros productos
+  </h1>
+
+  <!-- Grilla productos -->
+  <ion-grid >
+    <ion-row>
+      <!-- Tarjetas de productos -->
+      <app-card
+      *ngFor="let product of filteredProducts"
+      [product]="product"
+    ></app-card>
+    </ion-row>
+  </ion-grid>
+
+  <!-- Alertas de error -->
+  <ion-alert
+    *ngIf="errorMessage.length > 0"
+    header="Error"
+    message="{{ errorMessage[0] }}"
+    buttons="OK"
+    cssClass="error-alert"
+  ></ion-alert>
+
+  <!-- Búsqueda sin resultados -->
+  <div *ngIf="filteredProducts.length === 0" class="ion-text-center">
+    <ion-card color="danger">
+      <ion-card-header>
+        <ion-card-title>No se encontraron productos</ion-card-title>
+      </ion-card-header>
+    </ion-card>
+  </div>
+
+  <!-- Paginación -->
+<div class="ion-text-center text-sm">
+  <ion-button
+    (click)="previousPage()"
+    [disabled]="currentPage === 1"
+    color="secondary"
+    size="small"
+    class="px-2 py-1"
+  >
+    Anterior
+  </ion-button>
+
+  <span class="mx-2 text-xs">
+    Página {{ currentPage }} de {{ totalPages }}
+  </span>
+
+  <ion-button
+    (click)="nextPage()"
+    [disabled]="currentPage === totalPages"
+    color="secondary"
+    size="small"
+    class="px-2 py-1"
+  >
+    Siguiente
+  </ion-button>
+</div>
+
+</ion-content>
