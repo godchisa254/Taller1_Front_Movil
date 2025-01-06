@@ -13,16 +13,48 @@
             [(ngModel)]="searchQuery"
             (input)="onSearch()"
             class="ion-input-md "
-            placeholder="Buscar por nombre"
-            clearInput="true"
+            placeholder="Buscar por nombre" 
           ></ion-input>
         </div>
       </ion-col>
 
-      <!-- Filtros de búsqueda -->
-      <ion-col size="auto">
-        <div class="ion-padding-top">
-          <!-- Additional Filters could be added here -->
+      <!-- Filtros de categoría -->
+      <ion-col size="auto" size-md="4">
+        <div class="ion-padding-top ion-padding-bottom">
+          <ion-label class="ion-text-wrap">Categoría</ion-label>
+          <ion-select
+            [(ngModel)]="selectedCategoryId"
+            (ionChange)="onCategorySelect(selectedCategoryId, selectedCategoryName)"
+            interface="popover"
+            placeholder="Seleccionar categoría"
+          >
+            <ion-select-option
+              *ngFor="let type of productTypes"
+              [value]="type.id"
+            >
+              {{ type.type }}
+            </ion-select-option>
+          </ion-select>
+        </div>
+      </ion-col>
+
+      <!-- Filtros de precio -->
+      <ion-col size="auto" size-md="4">
+        <div class="ion-padding-top ion-padding-bottom">
+          <ion-label class="ion-text-wrap">Ordenar por precio</ion-label>
+          <ion-select
+            (ionChange)="onPriceSortChange($event)"
+            placeholder="Seleccionar orden"
+            interface="popover"
+          >
+            <ion-select-option value="">Sin orden</ion-select-option>
+            <ion-select-option value="menorAmayor">
+              Menor a mayor
+            </ion-select-option>
+            <ion-select-option value="mayorAmenor">
+              Mayor a menor
+            </ion-select-option>
+          </ion-select>
         </div>
       </ion-col>
     </ion-row>
@@ -63,25 +95,30 @@
   </div>
 
   <!-- Paginación -->
-  <div class="ion-text-center">
-    <ion-button
-      (click)="previousPage()"
-      [disabled]="currentPage === 1"
-      color="secondary"
-    >
-      Anterior
-    </ion-button>
+<div class="ion-text-center text-sm">
+  <ion-button
+    (click)="previousPage()"
+    [disabled]="currentPage === 1"
+    color="secondary"
+    size="small"
+    class="px-2 py-1"
+  >
+    Anterior
+  </ion-button>
 
-    <span class="ion-margin-horizontal">
-      Página {{ currentPage }} de {{ totalPages }}
-    </span>
+  <span class="mx-2 text-xs">
+    Página {{ currentPage }} de {{ totalPages }}
+  </span>
 
-    <ion-button
-      (click)="nextPage()"
-      [disabled]="currentPage === totalPages"
-      color="secondary"
-    >
-      Siguiente
-    </ion-button>
-  </div>
+  <ion-button
+    (click)="nextPage()"
+    [disabled]="currentPage === totalPages"
+    color="secondary"
+    size="small"
+    class="px-2 py-1"
+  >
+    Siguiente
+  </ion-button>
+</div>
+
 </ion-content>
