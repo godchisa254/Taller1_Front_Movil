@@ -16,11 +16,11 @@ import { finalize } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { IonicModule } from '@ionic/angular';
 import { LocalStorageService } from '../../service/local-storage.service';
-
+import { TabbarComponent } from '../../../shared/component/tabbar/tabbar.component';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, IonicModule],
+  imports: [CommonModule, ReactiveFormsModule, IonicModule ],
   templateUrl: './login.component.html',
 })
 export class LoginComponent {
@@ -68,8 +68,10 @@ export class LoginComponent {
               if (role === 'Admin') {
                 this.router.navigate(['/404']);
               } else {
-                this.router.navigate(['/products/list']);
+                this.router.navigate(['/tabs/home']);
                 console.log('Login successful');
+                this.authService.setAuthStatus(true);
+                this.localStorageService.setVariable('isAuthenticated', 'true');
                 this.loading = false;
               }
             }, 1500);

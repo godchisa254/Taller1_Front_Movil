@@ -6,7 +6,7 @@ import {
   HttpClientModule,
   HttpErrorResponse,
 } from '@angular/common/http';
-import { Observable, catchError, firstValueFrom, throwError } from 'rxjs'; 
+import { BehaviorSubject, Observable, catchError, firstValueFrom, throwError } from 'rxjs'; 
 import { CommonModule } from '@angular/common';
 import {  UserLogin } from '../interfaces/User';
 import { LocalStorageService } from './local-storage.service';  
@@ -19,6 +19,8 @@ export class AuthService {
   private http = inject(HttpClient);
   private localStorage = inject(LocalStorageService)
   public errors: string[] = [];
+  localStorageService: any;
+  private authStatusSubject  = new BehaviorSubject<boolean>(false);
  
   constructor() {
     this.initializeAuth(); 
@@ -52,4 +54,16 @@ export class AuthService {
         })
     );
   } 
+  isAuthenticated(): boolean {
+    return this.authStatusSubject.value;   
+  }
+ 
+  getAuthStatus(): Observable<boolean> {
+    return this.authStatusSubject.asObservable();
+  }
+ 
+  setAuthStatus(status: boolean): void {
+    this.localStorageService.setVariable('isAuthenticated', status.toString());
+    this.authStatusSubject.next(status);
+  }
 }
