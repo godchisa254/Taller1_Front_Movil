@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ProductResponseGet } from '../../interfaces/Product';
 import { ProductsService } from '../../service/products.service'; 
 import { IonicModule } from '@ionic/angular';
+import { ShoppingService } from '../../service/shopping.service';
 
 @Component({
   selector: 'app-card',
@@ -16,6 +17,7 @@ export class ProductsCardComponent implements OnChanges  {
   @Input() product!: ProductResponseGet;
   productTypeName: string = '';
   productsService = inject(ProductsService);
+  shoppingService = inject(ShoppingService);
   cantidad = 0;
   errorMessage: string[] = []; 
   constructor( ) {}
@@ -44,6 +46,7 @@ export class ProductsCardComponent implements OnChanges  {
         console.error('El ID del producto no es válido');
         return;
       } 
+      const response = await this.shoppingService.addProduct(productId,this.cantidad);
       this.cantidad = 0; 
     }catch (errors: any) {
       
